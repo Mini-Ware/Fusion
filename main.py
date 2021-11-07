@@ -5,8 +5,8 @@ from telegram import bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 #server
-import keep_alive
-keep_alive.keep_alive()
+from keep_alive import keep_alive
+keep_alive()
 
 #commands
 def help(update: bot, context: CallbackContext) -> None:
