@@ -9,6 +9,4 @@ General purpose Telegram bot where you can search for many things <br><br>
 Commands: help, id, ping<br>
 Animals: cat, dog<br>
 Singapore: covid, weather<br><br>
- [Try using Fusion](t.me/fused_bot)
-
-
+ [Try using Fusion](t.me/fused_bot) | [Hosted on Repl.it](https://replit.com/@MiniWare/Fusion)
