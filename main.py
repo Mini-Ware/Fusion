@@ -10,7 +10,7 @@ keep_alive()
 
 #commands
 def help(update: bot, context: CallbackContext) -> None:
-    update.message.reply_text("<strong>Fusion</strong>\nGeneral purpose Telegram bot where you can search for many things\n\n/help  List all commands\n/id  Retrive chat_id\n/ping  Check response\n\nAnimals\n/cat  Find a cat image\n/dog  Find a dog image\n\nSingapore\n/covid Get SG covid data\n/weather Get SG weather data\n\nt.me/fused_bot", parse_mode=telegram.ParseMode.HTML)
+    update.message.reply_text("<strong>Fusion</strong>\nGeneral purpose Telegram bot where you can search for many things\n\n/help  List all commands\n/id  Retrive chat_id\n/ping  Check response\n\n🐶 Animals\n/cat  Find a cat image\n/dog  Find a dog image\n\n📊 Statistics\n/covid Get SG covid data\n/weather Get SG weather data\n\nt.me/fused_bot", parse_mode=telegram.ParseMode.HTML)
 
 def start(update: bot, context: CallbackContext) -> None:
     update.message.reply_text("Hello! You can find the list of avaliable commands using /help")
@@ -19,12 +19,29 @@ def ping(update: bot, context: CallbackContext) -> None:
     update.message.reply_text("pong")
 
 def id(update: bot, context: CallbackContext) -> None:
-    update.message.reply_text(update.message.chat_id)
+    update.message.reply_text("<code>"+str(update.message.chat_id)+"</code>", parse_mode=telegram.ParseMode.HTML)
 
 def weather(update: bot, context: CallbackContext) -> None:
+
+    #cool emotes
+    def indicate(here):
+      sky = here.lower()
+      if sky.find("thunder") != -1:
+        return "⛈️ "+here
+      elif sky.find("shower") != -1 or sky.find("rain") != -1:
+        return "🌧️ "+here
+      elif sky.find("clear") != -1 or sky.find("sunny") != -1:
+        return "🌤️ "+here
+      elif sky.find("cloud") != -1:
+        return "☁️ "+here
+      elif sky.find("wind") != -1:
+        return "💨 "+here
+      else:
+        return sky
+
     condition =requests.get('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast').json()
     data = condition["items"][0]
-    update.message.reply_text("<strong>24-Hour Weather forecast</strong>\n\nCountry: "+data["general"]["forecast"]+"\n\n🌡️ Temperature: "+str(data["general"]["temperature"]["low"])+"-"+str(data["general"]["temperature"]["high"])+"°C\n💧 Humidity: "+str(data["general"]["relative_humidity"]["low"])+"-"+str(data["general"]["relative_humidity"]["high"])+"\n\nNorth: "+data["periods"][0]["regions"]["north"]+"\nSouth: "+data["periods"][0]["regions"]["south"]+"\nCentral: "+data["periods"][0]["regions"]["central"]+"\nEast: "+data["periods"][0]["regions"]["east"]+"\nWest: "+data["periods"][0]["regions"]["west"]+"\n\nSource: data.gov.sg", parse_mode=telegram.ParseMode.HTML)
+    update.message.reply_text("<strong>24-hour weather forecast</strong>\n\n🌡️ Temperature: "+str(data["general"]["temperature"]["low"])+"-"+str(data["general"]["temperature"]["high"])+"°C\n💧 Humidity: "+str(data["general"]["relative_humidity"]["low"])+"-"+str(data["general"]["relative_humidity"]["high"])+"%\n💨 Wind: "+data["general"]["wind"]["direction"]+" "+str(data["general"]["wind"]["speed"]["low"])+"-"+str(data["general"]["wind"]["speed"]["high"])+"km/h\n\nRegion: North\n"+indicate(data["periods"][0]["regions"]["north"])+" > "+indicate(data["periods"][1]["regions"]["north"])+" > "+indicate(data["periods"][2]["regions"]["north"])+"\n\nRegion: South\n"+indicate(data["periods"][0]["regions"]["south"])+" > "+indicate(data["periods"][1]["regions"]["south"])+" > "+indicate(data["periods"][2]["regions"]["south"])+"\n\nRegion: Central\n"+indicate(data["periods"][0]["regions"]["central"])+" > "+indicate(data["periods"][1]["regions"]["central"])+" > "+indicate(data["periods"][2]["regions"]["central"])+"\n\nRegion: East\n"+indicate(data["periods"][0]["regions"]["east"])+" > "+indicate(data["periods"][1]["regions"]["east"])+" > "+indicate(data["periods"][2]["regions"]["east"])+"\n\nRegion: West\n"+indicate(data["periods"][0]["regions"]["west"])+" > "+indicate(data["periods"][1]["regions"]["west"])+" > "+indicate(data["periods"][2]["regions"]["west"])+"\n\nSource: data.gov.sg", parse_mode=telegram.ParseMode.HTML)
 
 
 def covid(update: bot, context: CallbackContext) -> None:
