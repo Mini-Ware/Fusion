@@ -10,7 +10,7 @@ keep_alive()
 
 #commands
 def help(update: bot, context: CallbackContext) -> None:
-    update.message.reply_text("<strong>Fusion</strong>\nGeneral purpose Telegram bot where you can search for many things\n\n/help  List all commands\n/id  Retrive chat_id\n/ping  Check response\n\n🐶 Animals\n/cat  Find a cat image\n/dog  Find a dog image\n\n📊 Statistics\n/covid Get SG covid data\n/weather Get SG weather data\n\nt.me/fused_bot", parse_mode=telegram.ParseMode.HTML)
+    update.message.reply_text("<strong>Fusion</strong>\nGeneral purpose Telegram bot where you can search for many things\n\n/help  List all commands\n/id  Retrive chat_id\n/ping  Check response\n\n🐶 Animals\n/cat  Find a cat image\n/dog  Find a dog image\n\n📊 Statistics\n/weather Get SG weather data\n\nt.me/fused_bot", parse_mode=telegram.ParseMode.HTML)
 
 def start(update: bot, context: CallbackContext) -> None:
     update.message.reply_text("Hello! You can find the list of avaliable commands using /help")
@@ -41,9 +41,11 @@ def weather(update: bot, context: CallbackContext) -> None:
 
     condition =requests.get('https://api.data.gov.sg/v1/environment/24-hour-weather-forecast').json()
     data = condition["items"][0]
-    update.message.reply_text("<strong>24-hour weather forecast</strong>\n\n🌡️ Temperature: "+str(data["general"]["temperature"]["low"])+"-"+str(data["general"]["temperature"]["high"])+"°C\n💧 Humidity: "+str(data["general"]["relative_humidity"]["low"])+"-"+str(data["general"]["relative_humidity"]["high"])+"%\n💨 Wind: "+data["general"]["wind"]["direction"]+" "+str(data["general"]["wind"]["speed"]["low"])+"-"+str(data["general"]["wind"]["speed"]["high"])+"km/h\n\nRegion: North\n"+indicate(data["periods"][0]["regions"]["north"])+" > "+indicate(data["periods"][1]["regions"]["north"])+" > "+indicate(data["periods"][2]["regions"]["north"])+"\n\nRegion: South\n"+indicate(data["periods"][0]["regions"]["south"])+" > "+indicate(data["periods"][1]["regions"]["south"])+" > "+indicate(data["periods"][2]["regions"]["south"])+"\n\nRegion: Central\n"+indicate(data["periods"][0]["regions"]["central"])+" > "+indicate(data["periods"][1]["regions"]["central"])+" > "+indicate(data["periods"][2]["regions"]["central"])+"\n\nRegion: East\n"+indicate(data["periods"][0]["regions"]["east"])+" > "+indicate(data["periods"][1]["regions"]["east"])+" > "+indicate(data["periods"][2]["regions"]["east"])+"\n\nRegion: West\n"+indicate(data["periods"][0]["regions"]["west"])+" > "+indicate(data["periods"][1]["regions"]["west"])+" > "+indicate(data["periods"][2]["regions"]["west"])+"\n\nSource: data.gov.sg", parse_mode=telegram.ParseMode.HTML)
+    update.message.reply_text("<strong>24-hour weather forecast</strong>\n\n🌡️ Temperature: "+str(data["general"]["temperature"]["low"])+"-"+str(data["general"]["temperature"]["high"])+"°C\n💧 Humidity: "+str(data["general"]["relative_humidity"]["low"])+"-"+str(data["general"]["relative_humidity"]["high"])+"%\n💨 Wind: "+data["general"]["wind"]["direction"]+" "+str(data["general"]["wind"]["speed"]["low"])+"-"+str(data["general"]["wind"]["speed"]["high"])+"km/h\n\nSource: data.gov.sg", parse_mode=telegram.ParseMode.HTML)
 
+    #\n\nRegion: North\n"+indicate(data["periods"][0]["regions"]["north"])+" > "+indicate(data["periods"][1]["regions"]["north"])+" > "+indicate(data["periods"][2]["regions"]["north"])+"\n\nRegion: South\n"+indicate(data["periods"][0]["regions"]["south"])+" > "+indicate(data["periods"][1]["regions"]["south"])+" > "+indicate(data["periods"][2]["regions"]["south"])+"\n\nRegion: Central\n"+indicate(data["periods"][0]["regions"]["central"])+" > "+indicate(data["periods"][1]["regions"]["central"])+" > "+indicate(data["periods"][2]["regions"]["central"])+"\n\nRegion: East\n"+indicate(data["periods"][0]["regions"]["east"])+" > "+indicate(data["periods"][1]["regions"]["east"])+" > "+indicate(data["periods"][2]["regions"]["east"])+"\n\nRegion: West\n"+indicate(data["periods"][0]["regions"]["west"])+" > "+indicate(data["periods"][1]["regions"]["west"])+" > "+indicate(data["periods"][2]["regions"]["west"])+"
 
+"""
 def covid(update: bot, context: CallbackContext) -> None:
     cases =requests.get('https://data.gov.sg/api/action/datastore_search?resource_id=60b1a923-1a5e-44ef-a4ae-046345146725').json()
     data = cases['result']['records']
@@ -108,6 +110,7 @@ def covid(update: bot, context: CallbackContext) -> None:
     d_chart = "Age group: "+data[5]['age']+"\n"+d_chart[x]+"\n"+d_chart[y]
 
     update.message.reply_text("<strong>Proportion of cases who ever required O2, in ICU or died</strong>\n\n"+a_chart+"\n\n"+b_chart+"\n\n"+c_chart+"\n\n"+d_chart+"\n\nLegend:\n🟥 Unvaccinated\n🟧 Partially Vaccinated\n🟫 Fully Vaccinated\n\nSource: data.gov.sg", parse_mode=telegram.ParseMode.HTML)
+"""
 
 def cat(update: bot, context: CallbackContext) -> None:
     json = requests.get(url="https://some-random-api.ml/animal/cat").json()
@@ -128,7 +131,6 @@ def main():
     dispatcher.add_handler(CommandHandler("cat", cat))
     dispatcher.add_handler(CommandHandler("dog", dog))
     dispatcher.add_handler(CommandHandler("id", id))
-    dispatcher.add_handler(CommandHandler("covid", covid))
     dispatcher.add_handler(CommandHandler("weather", weather))
 
     client.start_polling()
